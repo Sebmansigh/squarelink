@@ -1,0 +1,569 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1547AEE31FCF2A0A0017B04F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1547AEE21FCF2A0A0017B04F /* AppDelegate.swift */; };
+		1547AEE51FCF2A0A0017B04F /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 1547AEE41FCF2A0A0017B04F /* GameScene.sks */; };
+		1547AEE71FCF2A0A0017B04F /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 1547AEE61FCF2A0A0017B04F /* Actions.sks */; };
+		1547AEE91FCF2A0A0017B04F /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1547AEE81FCF2A0A0017B04F /* GameScene.swift */; };
+		1547AEEB1FCF2A0A0017B04F /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1547AEEA1FCF2A0A0017B04F /* GameViewController.swift */; };
+		1547AEEE1FCF2A0A0017B04F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1547AEEC1FCF2A0A0017B04F /* Main.storyboard */; };
+		1547AEF01FCF2A0A0017B04F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1547AEEF1FCF2A0A0017B04F /* Assets.xcassets */; };
+		1547AEF31FCF2A0A0017B04F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1547AEF11FCF2A0A0017B04F /* LaunchScreen.storyboard */; };
+		1547AEFE1FCF2A0B0017B04F /* SquareLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1547AEFD1FCF2A0B0017B04F /* SquareLinkTests.swift */; };
+		1547AF091FCF2A0B0017B04F /* SquareLinkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1547AF081FCF2A0B0017B04F /* SquareLinkUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1547AEFA1FCF2A0B0017B04F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1547AED71FCF2A090017B04F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1547AEDE1FCF2A090017B04F;
+			remoteInfo = SquareLink;
+		};
+		1547AF051FCF2A0B0017B04F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1547AED71FCF2A090017B04F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1547AEDE1FCF2A090017B04F;
+			remoteInfo = SquareLink;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1547AEDF1FCF2A0A0017B04F /* SquareLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SquareLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1547AEE21FCF2A0A0017B04F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1547AEE41FCF2A0A0017B04F /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		1547AEE61FCF2A0A0017B04F /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
+		1547AEE81FCF2A0A0017B04F /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		1547AEEA1FCF2A0A0017B04F /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		1547AEED1FCF2A0A0017B04F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1547AEEF1FCF2A0A0017B04F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1547AEF21FCF2A0A0017B04F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1547AEF41FCF2A0A0017B04F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1547AEF91FCF2A0B0017B04F /* SquareLinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SquareLinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1547AEFD1FCF2A0B0017B04F /* SquareLinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareLinkTests.swift; sourceTree = "<group>"; };
+		1547AEFF1FCF2A0B0017B04F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1547AF041FCF2A0B0017B04F /* SquareLinkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SquareLinkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1547AF081FCF2A0B0017B04F /* SquareLinkUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareLinkUITests.swift; sourceTree = "<group>"; };
+		1547AF0A1FCF2A0B0017B04F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1547AEDC1FCF2A090017B04F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1547AEF61FCF2A0B0017B04F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1547AF011FCF2A0B0017B04F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1547AED61FCF2A090017B04F = {
+			isa = PBXGroup;
+			children = (
+				1547AEE11FCF2A0A0017B04F /* SquareLink */,
+				1547AEFC1FCF2A0B0017B04F /* SquareLinkTests */,
+				1547AF071FCF2A0B0017B04F /* SquareLinkUITests */,
+				1547AEE01FCF2A0A0017B04F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1547AEE01FCF2A0A0017B04F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1547AEDF1FCF2A0A0017B04F /* SquareLink.app */,
+				1547AEF91FCF2A0B0017B04F /* SquareLinkTests.xctest */,
+				1547AF041FCF2A0B0017B04F /* SquareLinkUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1547AEE11FCF2A0A0017B04F /* SquareLink */ = {
+			isa = PBXGroup;
+			children = (
+				1547AEE21FCF2A0A0017B04F /* AppDelegate.swift */,
+				1547AEE41FCF2A0A0017B04F /* GameScene.sks */,
+				1547AEE61FCF2A0A0017B04F /* Actions.sks */,
+				1547AEE81FCF2A0A0017B04F /* GameScene.swift */,
+				1547AEEA1FCF2A0A0017B04F /* GameViewController.swift */,
+				1547AEEC1FCF2A0A0017B04F /* Main.storyboard */,
+				1547AEEF1FCF2A0A0017B04F /* Assets.xcassets */,
+				1547AEF11FCF2A0A0017B04F /* LaunchScreen.storyboard */,
+				1547AEF41FCF2A0A0017B04F /* Info.plist */,
+			);
+			path = SquareLink;
+			sourceTree = "<group>";
+		};
+		1547AEFC1FCF2A0B0017B04F /* SquareLinkTests */ = {
+			isa = PBXGroup;
+			children = (
+				1547AEFD1FCF2A0B0017B04F /* SquareLinkTests.swift */,
+				1547AEFF1FCF2A0B0017B04F /* Info.plist */,
+			);
+			path = SquareLinkTests;
+			sourceTree = "<group>";
+		};
+		1547AF071FCF2A0B0017B04F /* SquareLinkUITests */ = {
+			isa = PBXGroup;
+			children = (
+				1547AF081FCF2A0B0017B04F /* SquareLinkUITests.swift */,
+				1547AF0A1FCF2A0B0017B04F /* Info.plist */,
+			);
+			path = SquareLinkUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1547AEDE1FCF2A090017B04F /* SquareLink */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1547AF0D1FCF2A0B0017B04F /* Build configuration list for PBXNativeTarget "SquareLink" */;
+			buildPhases = (
+				1547AEDB1FCF2A090017B04F /* Sources */,
+				1547AEDC1FCF2A090017B04F /* Frameworks */,
+				1547AEDD1FCF2A090017B04F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SquareLink;
+			productName = SquareLink;
+			productReference = 1547AEDF1FCF2A0A0017B04F /* SquareLink.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1547AEF81FCF2A0B0017B04F /* SquareLinkTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1547AF101FCF2A0B0017B04F /* Build configuration list for PBXNativeTarget "SquareLinkTests" */;
+			buildPhases = (
+				1547AEF51FCF2A0B0017B04F /* Sources */,
+				1547AEF61FCF2A0B0017B04F /* Frameworks */,
+				1547AEF71FCF2A0B0017B04F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1547AEFB1FCF2A0B0017B04F /* PBXTargetDependency */,
+			);
+			name = SquareLinkTests;
+			productName = SquareLinkTests;
+			productReference = 1547AEF91FCF2A0B0017B04F /* SquareLinkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1547AF031FCF2A0B0017B04F /* SquareLinkUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1547AF131FCF2A0B0017B04F /* Build configuration list for PBXNativeTarget "SquareLinkUITests" */;
+			buildPhases = (
+				1547AF001FCF2A0B0017B04F /* Sources */,
+				1547AF011FCF2A0B0017B04F /* Frameworks */,
+				1547AF021FCF2A0B0017B04F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1547AF061FCF2A0B0017B04F /* PBXTargetDependency */,
+			);
+			name = SquareLinkUITests;
+			productName = SquareLinkUITests;
+			productReference = 1547AF041FCF2A0B0017B04F /* SquareLinkUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1547AED71FCF2A090017B04F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0910;
+				LastUpgradeCheck = 0910;
+				ORGANIZATIONNAME = "Sebastian Snyder";
+				TargetAttributes = {
+					1547AEDE1FCF2A090017B04F = {
+						CreatedOnToolsVersion = 9.1;
+						ProvisioningStyle = Automatic;
+					};
+					1547AEF81FCF2A0B0017B04F = {
+						CreatedOnToolsVersion = 9.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 1547AEDE1FCF2A090017B04F;
+					};
+					1547AF031FCF2A0B0017B04F = {
+						CreatedOnToolsVersion = 9.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 1547AEDE1FCF2A090017B04F;
+					};
+				};
+			};
+			buildConfigurationList = 1547AEDA1FCF2A090017B04F /* Build configuration list for PBXProject "SquareLink" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1547AED61FCF2A090017B04F;
+			productRefGroup = 1547AEE01FCF2A0A0017B04F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1547AEDE1FCF2A090017B04F /* SquareLink */,
+				1547AEF81FCF2A0B0017B04F /* SquareLinkTests */,
+				1547AF031FCF2A0B0017B04F /* SquareLinkUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1547AEDD1FCF2A090017B04F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1547AEEE1FCF2A0A0017B04F /* Main.storyboard in Resources */,
+				1547AEE51FCF2A0A0017B04F /* GameScene.sks in Resources */,
+				1547AEF01FCF2A0A0017B04F /* Assets.xcassets in Resources */,
+				1547AEF31FCF2A0A0017B04F /* LaunchScreen.storyboard in Resources */,
+				1547AEE71FCF2A0A0017B04F /* Actions.sks in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1547AEF71FCF2A0B0017B04F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1547AF021FCF2A0B0017B04F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1547AEDB1FCF2A090017B04F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1547AEE91FCF2A0A0017B04F /* GameScene.swift in Sources */,
+				1547AEEB1FCF2A0A0017B04F /* GameViewController.swift in Sources */,
+				1547AEE31FCF2A0A0017B04F /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1547AEF51FCF2A0B0017B04F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1547AEFE1FCF2A0B0017B04F /* SquareLinkTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1547AF001FCF2A0B0017B04F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1547AF091FCF2A0B0017B04F /* SquareLinkUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1547AEFB1FCF2A0B0017B04F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1547AEDE1FCF2A090017B04F /* SquareLink */;
+			targetProxy = 1547AEFA1FCF2A0B0017B04F /* PBXContainerItemProxy */;
+		};
+		1547AF061FCF2A0B0017B04F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1547AEDE1FCF2A090017B04F /* SquareLink */;
+			targetProxy = 1547AF051FCF2A0B0017B04F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1547AEEC1FCF2A0A0017B04F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1547AEED1FCF2A0A0017B04F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		1547AEF11FCF2A0A0017B04F /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1547AEF21FCF2A0A0017B04F /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1547AF0B1FCF2A0B0017B04F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1547AF0C1FCF2A0B0017B04F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1547AF0E1FCF2A0B0017B04F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SquareLink/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sjs.SquareLink;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1547AF0F1FCF2A0B0017B04F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SquareLink/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sjs.SquareLink;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		1547AF111FCF2A0B0017B04F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SquareLinkTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sjs.SquareLinkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SquareLink.app/SquareLink";
+			};
+			name = Debug;
+		};
+		1547AF121FCF2A0B0017B04F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SquareLinkTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sjs.SquareLinkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SquareLink.app/SquareLink";
+			};
+			name = Release;
+		};
+		1547AF141FCF2A0B0017B04F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SquareLinkUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sjs.SquareLinkUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SquareLink;
+			};
+			name = Debug;
+		};
+		1547AF151FCF2A0B0017B04F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SquareLinkUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sjs.SquareLinkUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SquareLink;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1547AEDA1FCF2A090017B04F /* Build configuration list for PBXProject "SquareLink" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1547AF0B1FCF2A0B0017B04F /* Debug */,
+				1547AF0C1FCF2A0B0017B04F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1547AF0D1FCF2A0B0017B04F /* Build configuration list for PBXNativeTarget "SquareLink" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1547AF0E1FCF2A0B0017B04F /* Debug */,
+				1547AF0F1FCF2A0B0017B04F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1547AF101FCF2A0B0017B04F /* Build configuration list for PBXNativeTarget "SquareLinkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1547AF111FCF2A0B0017B04F /* Debug */,
+				1547AF121FCF2A0B0017B04F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1547AF131FCF2A0B0017B04F /* Build configuration list for PBXNativeTarget "SquareLinkUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1547AF141FCF2A0B0017B04F /* Debug */,
+				1547AF151FCF2A0B0017B04F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1547AED71FCF2A090017B04F /* Project object */;
+}
