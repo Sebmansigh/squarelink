@@ -17,12 +17,12 @@ class GameScene: SKScene {
         bg.position = CGPoint(x: 0,y: 0)
         bg.size = frame.size
         
-        for i in 0...10{
+        for i in 0...9{
             bgcells[i] = Array<SKSpriteNode?>(repeating: nil, count: 10)
-            for j in 0...10{
-                var thiscell = SKSpriteNode(color: UIColor.darkGray, size: CGSize(width:10,height:10))
+            for j in 0...9{
+                var thiscell = SKSpriteNode(color: UIColor.darkGray, size: CGSize(width:20,height:20))
                 bgcells[i]![j] = thiscell
-                thiscell.position = CGPoint(x: 10+i*10, y: 10+j*10)
+                thiscell.position = CGPoint(x: i*30, y: j*30)
                 addChild(thiscell)
             }
         }
