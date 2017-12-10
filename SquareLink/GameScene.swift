@@ -14,6 +14,8 @@ class GameScene: SKScene {
     var bgcells = Array< Array<BGCell?>? >(repeating: nil, count: 13)
     var pieces: Array<Array<SKSpriteNode?>?>? = nil
     var level: UInt64 = 1
+    
+    var levelNode: SKLabelNode? = nil;
     override func didMove(to view: SKView) {
         let bg = childNode(withName: "background") as! SKSpriteNode
         
@@ -29,7 +31,28 @@ class GameScene: SKScene {
                 addChild(thiscell)
             }
         }
+        
+        levelNode = SKLabelNode(text: "Generating First Level...")
+        levelNode?.fontName = "Avenir-Heavy"
+        /*
+        for familyName in UIFont.familyNames.sorted()
+        {
+            print("\""+familyName+"\"\n")
+            for fontName in UIFont.fontNames(forFamilyName: familyName).sorted()
+            {
+                print("    \""+fontName+"\"\n")
+            }
+        }
+        */
+        levelNode!.fontColor = UIColor.black
+        levelNode!.fontSize = 64
+        
+        
+        levelNode!.position = CGPoint(x: 0, y: 240 + Int(frame.height) / 5)
+        
         pieces = generateLevel(level: level)
+        
+        addChild(levelNode!)
     }
     
     func nextLevel()
@@ -49,6 +72,14 @@ class GameScene: SKScene {
             }
         }
         pieces = nil
+        
+        for i in 0...bgcells.count-1
+        {
+            for j in 0...bgcells[i]!.count-1
+            {
+                bgcells[i]![j]!.Clear()
+            }
+        }
     }
     
     func GeneratePath(rand: GKRandomSource, level: UInt64) -> Stack<SKSpriteNode>
@@ -62,30 +93,10 @@ class GameScene: SKScene {
         let Path = Stack<SKSpriteNode>()
         Path.Push(data: thiscell)
         
-        assert(GeneratePathPartial(rand: rand, path: Path, a: 0, b: 0, MaxPath: Int(27+level*2)))
-        /*
-            while(true)
-            {
-                let thiscell = SKSpriteNode(color: UIColor.black, size: CGSize(width:30,height:30))
-                Path.Push(data: thiscell)
-                thiscell.position = bgcells[a]![b]!.Node.position
-                addChild(thiscell)
-         
-                if((dist.nextInt() == 1 && a < 12) || b == 12)
-                {
-                    a+=1
-                }
-                else
-                {
-                    b+=1
-                }
-         
-                if(a == 12 && b == 12)
-                {
-                    break;
-                }
-            }
-        */
+        assert(GeneratePathPartial(rand: rand, path: Path, a: 0, b: 0, MaxPath: Int(23+level*2)))
+        
+        levelNode!.text = "Level " + String(level)
+        
         return Path
     }
     
@@ -103,7 +114,7 @@ class GameScene: SKScene {
         // Shuffle an array of direction vectors ( 2 swaps only, to prioritize up-left! )
         var Dirs = [[0,1],[1,0],[0,-1],[-1,0]]
         let Dist = GKRandomDistribution(randomSource: rand, lowestValue: 0, highestValue: 3)
-        for _ in 0...2
+        for _ in 0...1
         {
             let fromPos = Dist.nextInt()
             let toPos = Dist.nextInt()
@@ -175,18 +186,71 @@ class GameScene: SKScene {
                 let thiscell = path.PopForce()
                 thiscell.removeFromParent()
                 testcell.Clear()
+                
             }
         }
         return false
     }
     
     
-    func GeneratePieces(rand: GKRandomSource, level: UInt64, path: Stack<SKSpriteNode>) -> Array<Array<SKSpriteNode?>?>?
+    func GeneratePieces(rand: GKRandomSource, level: UInt64, path: Stack<SKSpriteNode>) -> Array<Array<SKSpriteNode?>?>
     {
-        return nil
+        var AvgPieceSize = 9
+        if(level > 15)
+        {
+            AvgPieceSize = 7
+        }
+        if(level > 30)
+        {
+            AvgPieceSize = 6
+        }
+        
+        
+        let NumPieces = path.count / AvgPieceSize
+        var Fudging = path.count % AvgPieceSize
+        
+        var Pieces = Array<Array<SKSpriteNode?>?>(repeating: nil, count: NumPieces)
+        
+        var Colors: Array<UIColor> = [];
+        for i in 0...NumPieces-1
+        {
+            if(i % 8 == 0)
+            {
+                Colors = generateColors(rand: rand)
+            }
+            var FudgingUse = 0
+            if(Fudging > 0)
+            {
+                if(Fudging % (NumPieces-i) == 0)
+                {
+                    FudgingUse = Fudging/(NumPieces-i)
+                    Fudging -= FudgingUse
+                }
+                else
+                {
+                    let RandSource = GKRandomDistribution(randomSource: rand, lowestValue: 0, highestValue: NumPieces-i)
+                    FudgingUse = Fudging/(NumPieces-i)
+                    if(RandSource.nextInt() == 0)
+                    {
+                        FudgingUse += 1
+                    }
+                    Fudging -= FudgingUse
+                }
+            }
+            var ThisPiece = Array<SKSpriteNode?>(repeating: nil, count: AvgPieceSize+FudgingUse)
+            let thiscolor = Colors[i % 8]
+            for j in 0...ThisPiece.count-1
+            {
+                let thiscell = path.PopForce();
+                ThisPiece[j] = thiscell
+                thiscell.color = thiscolor
+            }
+            Pieces[i] = ThisPiece
+        }
+        return Pieces
     }
     
-    func generateLevel(level: UInt64) -> Array<Array<SKSpriteNode?>?>? {
+    func generateLevel(level: UInt64) -> Array<Array<SKSpriteNode?>?> {
         
         let RandomSource = GKMersenneTwisterRandomSource()
         RandomSource.seed = (1234567890123456789 - (level * level * level * level * 32 / (256+(level*level*level))))
@@ -224,9 +288,9 @@ class GameScene: SKScene {
         */
     }
     
-    func generateColors(source: GKRandomSource) -> Array<UIColor>
+    func generateColors(rand: GKRandomSource) -> Array<UIColor>
     {
-        let IndexDist = GKRandomDistribution(randomSource: source, lowestValue: 0, highestValue: 7)
+        let IndexDist = GKRandomDistribution(randomSource: rand, lowestValue: 0, highestValue: 7)
         var ColArr = [UIColor.red, UIColor.blue, UIColor.green, UIColor.yellow, UIColor.purple, UIColor.cyan, UIColor.orange, UIColor.magenta]
         for _ in 0...255
         {

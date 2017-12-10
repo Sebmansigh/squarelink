@@ -22,7 +22,12 @@ class BGCell
     
     func Occupied() -> Bool
     {
-        return Occupant == nil
+        guard let _ : SKSpriteNode = Occupant else
+        {
+           return false
+        }
+        
+        return true
     }
     
     func Accept(node: SKSpriteNode)

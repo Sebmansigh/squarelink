@@ -16,6 +16,7 @@ class Stack<T>
     func Push(data: T)
     {
         Data = [data, Data]
+        count += 1
     }
     
     func PopTry() -> T?
@@ -28,6 +29,7 @@ class Stack<T>
         {
             let ret = Data[0]
             Data = Data[1] as! Array<Any>
+            count -= 1
             return ret as? T
         }
     }
@@ -40,6 +42,7 @@ class Stack<T>
         }
         let ret = Data[0]
         Data = Data[1] as! Array<Any>
+        count -= 1
         return ret as! T
     }
     
