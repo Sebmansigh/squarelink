@@ -63,6 +63,18 @@ class Piece
         }
     }
     
+    func Contains(_ node: SKNode) -> Bool
+    {
+        for Node in Nodes
+        {
+            if(Node == node)
+            {
+                return true
+            }
+        }
+        return false
+    }
+    
     func RemoveFromUI()
     {
         for node in Nodes
@@ -77,5 +89,17 @@ class Piece
         {
             Nodes[i].position = CGPoint(x: 30*CGFloat(positions[i].0)+x, y: 30*CGFloat(positions[i].1)+y)
         }
+        
+        UIPosition = Nodes[0].position
+    }
+    
+    func MoveToPoint(point: CGPoint)
+    {
+        MoveToPoint(x: point.x, y: point.y)
+    }
+    
+    func GetUIPosition() -> CGPoint
+    {
+        return UIPosition
     }
 }

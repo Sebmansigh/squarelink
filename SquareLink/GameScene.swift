@@ -18,25 +18,34 @@ class GameScene: SKScene {
     var leftLevelArrow: SKShapeNode? = nil
     var rightLevelArrow: SKShapeNode? = nil
     
+    var UINodes: Array<SKNode> = []
+    
     var levelNode: SKLabelNode? = nil;
+    
+    
+    
+    
     override func didMove(to view: SKView) {
         let bg = childNode(withName: "background") as! SKSpriteNode
-        
         bg.position = CGPoint(x: 0,y: 0)
         bg.size = frame.size
+        
+        
+        UINodes.append(bg)
         let defsize = CGSize(width:20,height:20)
         for i in 0...12{
             bgcells[i] = Array<BGCell?>(repeating: nil, count: 13)
             for j in 0...12{
                 let thiscell = SKSpriteNode(color: UIColor.darkGray, size: defsize)
                 bgcells[i]![j] = BGCell(node: thiscell)
+                UINodes.append(thiscell)
                 thiscell.position = CGPoint(x: (i-6)*30, y: (j-6)*30 + Int(frame.height) / 5)
                 addChild(thiscell)
             }
         }
         
         let tray = SKSpriteNode(color: UIColor.lightGray, size: CGSize(width:frame.width, height: frame.height/2))
-        
+        UINodes.append(tray)
         
         tray.position = CGPoint(x:0, y: -frame.height/4)
         addChild(tray)
@@ -46,22 +55,10 @@ class GameScene: SKScene {
         
         levelNode = SKLabelNode(text: "Generating First Level...")
         levelNode?.fontName = "Avenir-Heavy"
-        /*
-        for familyName in UIFont.familyNames.sorted()
-        {
-            print("\""+familyName+"\"\n")
-            for fontName in UIFont.fontNames(forFamilyName: familyName).sorted()
-            {
-                print("    \""+fontName+"\"\n")
-            }
-        }
-        */
         levelNode!.fontColor = UIColor.black
         levelNode!.fontSize = 64
-        
-        
         levelNode!.position = CGPoint(x: 0, y: 240 + Int(frame.height) / 5)
-        
+        UINodes.append(levelNode!)
         
         
         
@@ -80,6 +77,8 @@ class GameScene: SKScene {
         rightLevelArrow!.position = CGPoint(x:levelNode!.position.x+180, y: levelNode!.position.y+20)
         rightLevelArrow!.zRotation = -CGFloat.pi/2
         
+        UINodes.append(leftLevelArrow!)
+        UINodes.append(rightLevelArrow!)
         
         LoadLevel(1)
         
@@ -395,31 +394,82 @@ class GameScene: SKScene {
         }
     }
     
-    func touchDown(atPoint pos : CGPoint) {
-        
+    func getSelectedPieceFromNodes(nodes: [SKNode]) -> Piece?
+    {
+        if(pieces == nil)
+        {
+            return nil
+        }
+        for Node in nodes
+        {
+            var test = true
+            for UINode in UINodes
+            {
+                if(Node == UINode)
+                {
+                    //Node is a UI node!
+                    test = false
+                    break
+                }
+            }
+            if(test) //We've got a piece here, folks!
+            {
+                //find the piece the node belongs to
+                for Piece in pieces!
+                {
+                    if(Piece.Contains(Node))
+                    {
+                        return Piece
+                    }
+                }
+            }
+        }
+        return nil
     }
     
-    func touchMoved(toPoint pos : CGPoint) {
+    var touchStarted: CGPoint? = nil
+    var pieceSelected: Piece? = nil
+    
+    func touchDown(touch: UITouch, atPoint pos : CGPoint) {
+        let nodesUnderTouch = nodes(at: pos)
+        // check for piece selected
+        let P = getSelectedPieceFromNodes(nodes: nodesUnderTouch)
         
+        if(P != nil)
+        {
+            touchStarted = CGPoint(x: pos.x-P!.GetUIPosition().x, y: pos.y-P!.GetUIPosition().y)
+            pieceSelected = P
+            //Don't interact with UI if a piece has been selected
+            return
+        }
     }
     
-    func touchUp(atPoint pos : CGPoint) {
+    func touchMoved(touch: UITouch, toPoint pos : CGPoint) {
+        if(pieceSelected != nil)
+        {
+            pieceSelected!.MoveToPoint(x: pos.x-touchStarted!.x, y: pos.y-touchStarted!.y)
+        }
+    }
+    
+    func touchUp(touch: UITouch, atPoint pos : CGPoint) {
+        pieceSelected = nil
+        touchStarted = nil
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {        
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        for t in touches { self.touchDown(touch: t, atPoint: t.location(in: self)) }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+        for t in touches { self.touchMoved(touch: t, toPoint: t.location(in: self)) }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        for t in touches { self.touchUp(touch: t, atPoint: t.location(in: self)) }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        for t in touches { self.touchUp(touch: t, atPoint: t.location(in: self)) }
     }
     
     
