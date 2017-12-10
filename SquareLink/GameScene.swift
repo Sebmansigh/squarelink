@@ -12,9 +12,9 @@ import GameKit
 
 class GameScene: SKScene {
     var bgcells = Array< Array<BGCell?>? >(repeating: nil, count: 13)
-    var pieces: Array<Array<SKSpriteNode?>?>? = nil
+    var pieces: Array<Piece>? = nil
     var obstacles: Array<SKSpriteNode?>? = nil
-    var level: UInt64 = 1
+    var level: UInt64 = 0
     var leftLevelArrow: SKShapeNode? = nil
     var rightLevelArrow: SKShapeNode? = nil
     
@@ -81,26 +81,37 @@ class GameScene: SKScene {
         rightLevelArrow!.zRotation = -CGFloat.pi/2
         
         
-        pieces = generateLevel(level: level)
+        LoadLevel(1)
+        
+        BeginLoadedLevel()
         
         addChild(levelNode!)
     }
     
-    func nextLevel()
+    func LoadNextLevel()
+    {
+        LoadLevel(level+1)
+        
+    }
+    
+    func LoadLevel(_ newLevel: UInt64)
     {
         clearLevel()
-        level += 1
-        pieces = generateLevel(level: level)
+        level = newLevel
+        pieces = GenerateLevel(level: level)
+        BeginLoadedLevel()
     }
     
     func clearLevel()
     {
-        for i in 0...pieces!.count-1
+        if(level == 0)
         {
-            for n in 0...pieces![i]!.count-1
-            {
-                pieces![i]![n]!.removeFromParent()
-            }
+            return
+        }
+        
+        for piece in pieces!
+        {
+            piece.RemoveFromUI()
         }
         pieces = nil
         
@@ -122,7 +133,7 @@ class GameScene: SKScene {
         }
     }
     
-    func generateLevel(level: UInt64) -> Array<Array<SKSpriteNode?>?> {
+    func GenerateLevel(level: UInt64) -> Array<Piece> {
         
         let RandomSource = GKMersenneTwisterRandomSource()
         RandomSource.seed = (1234567890123456789 - (level * level * level * level * 32 / (256+(level*level*level))))
@@ -130,6 +141,9 @@ class GameScene: SKScene {
         let Path = GeneratePath(rand: RandomSource, level: level)
         let Pieces = GeneratePieces(rand: RandomSource, level: level, path: Path)
         obstacles = GenerateObstacles(rand: RandomSource, level: level)
+        
+        levelNode!.text = "Level " + String(level)
+        
         return Pieces
     }
     
@@ -146,7 +160,6 @@ class GameScene: SKScene {
         
         assert(GeneratePathPartial(rand: rand, path: Path, a: 0, b: 0, MaxPath: Int(23+level*2)))
         
-        levelNode!.text = "Level " + String(level*10000)
         
         return Path
     }
@@ -259,7 +272,7 @@ class GameScene: SKScene {
     }
     
     
-    func GeneratePieces(rand: GKRandomSource, level: UInt64, path: Stack<SKSpriteNode>) -> Array<Array<SKSpriteNode?>?>
+    func GeneratePieces(rand: GKRandomSource, level: UInt64, path: Stack<SKSpriteNode>) -> Array<Piece>
     {
         var AvgPieceSize = 9
         if(level > 15)
@@ -278,7 +291,7 @@ class GameScene: SKScene {
         let NumPieces = path.count / AvgPieceSize
         var Fudging = path.count % AvgPieceSize
         
-        var Pieces = Array<Array<SKSpriteNode?>?>(repeating: nil, count: NumPieces)
+        var Pieces: Array<Piece> = []
         
         var Colors: Array<UIColor> = [];
         for i in 0...NumPieces-1
@@ -306,15 +319,16 @@ class GameScene: SKScene {
                     Fudging -= FudgingUse
                 }
             }
-            var ThisPiece = Array<SKSpriteNode?>(repeating: nil, count: AvgPieceSize+FudgingUse)
-            let thiscolor = Colors[i % 8]
-            for j in 0...ThisPiece.count-1
+            var prevcell = path.PopForce()
+            let ThisPiece = Piece(baseNode: prevcell)
+            for _ in 1...AvgPieceSize+FudgingUse-1
             {
                 let thiscell = path.PopForce();
-                ThisPiece[j] = thiscell
-                thiscell.color = thiscolor
+                ThisPiece.Append(next:thiscell, dirX: Int(thiscell.position.x-prevcell.position.x)/30, dirY: Int(thiscell.position.y-prevcell.position.y)/30)
+                prevcell = thiscell
             }
-            Pieces[i] = ThisPiece
+            ThisPiece.Color(color: Colors[i % 8])
+            Pieces.append(ThisPiece)
         }
         return Pieces
     }
@@ -371,6 +385,16 @@ class GameScene: SKScene {
         }
     }
     
+    func BeginLoadedLevel() {
+        for i in 0...pieces!.count-1
+        {
+            let rot = 2*CGFloat.pi*CGFloat(i)/CGFloat(pieces!.count)
+            let radius = frame.height/8
+            let Piece = pieces![i]
+            Piece.MoveToPoint(x: sin(rot)*radius ,y: cos(rot)*radius - frame.height/4 + 90)
+        }
+    }
+    
     func touchDown(atPoint pos : CGPoint) {
         
     }
@@ -380,7 +404,6 @@ class GameScene: SKScene {
     }
     
     func touchUp(atPoint pos : CGPoint) {
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {        

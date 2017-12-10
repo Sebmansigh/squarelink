@@ -18,6 +18,7 @@
 		1547AF091FCF2A0B0017B04F /* SquareLinkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1547AF081FCF2A0B0017B04F /* SquareLinkUITests.swift */; };
 		15BE44C91FDCB8E90091AAF7 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BE44C81FDCB8E90091AAF7 /* Stack.swift */; };
 		15BE44CB1FDCBD4C0091AAF7 /* BGCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BE44CA1FDCBD4C0091AAF7 /* BGCell.swift */; };
+		15BE44CD1FDCEC670091AAF7 /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BE44CC1FDCEC670091AAF7 /* Piece.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		1547AF0A1FCF2A0B0017B04F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		15BE44C81FDCB8E90091AAF7 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
 		15BE44CA1FDCBD4C0091AAF7 /* BGCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BGCell.swift; sourceTree = "<group>"; };
+		15BE44CC1FDCEC670091AAF7 /* Piece.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Piece.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				1547AEE21FCF2A0A0017B04F /* AppDelegate.swift */,
 				1547AEE41FCF2A0A0017B04F /* GameScene.sks */,
 				1547AEE81FCF2A0A0017B04F /* GameScene.swift */,
+				15BE44CC1FDCEC670091AAF7 /* Piece.swift */,
 				15BE44CA1FDCBD4C0091AAF7 /* BGCell.swift */,
 				1547AEEA1FCF2A0A0017B04F /* GameViewController.swift */,
 				1547AEEC1FCF2A0A0017B04F /* Main.storyboard */,
@@ -274,6 +277,7 @@
 			files = (
 				15BE44CB1FDCBD4C0091AAF7 /* BGCell.swift in Sources */,
 				15BE44C91FDCB8E90091AAF7 /* Stack.swift in Sources */,
+				15BE44CD1FDCEC670091AAF7 /* Piece.swift in Sources */,
 				1547AEE91FCF2A0A0017B04F /* GameScene.swift in Sources */,
 				1547AEEB1FCF2A0A0017B04F /* GameViewController.swift in Sources */,
 				1547AEE31FCF2A0A0017B04F /* AppDelegate.swift in Sources */,
