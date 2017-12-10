@@ -13,7 +13,10 @@ import GameKit
 class GameScene: SKScene {
     var bgcells = Array< Array<BGCell?>? >(repeating: nil, count: 13)
     var pieces: Array<Array<SKSpriteNode?>?>? = nil
+    var obstacles: Array<SKSpriteNode?>? = nil
     var level: UInt64 = 1
+    var leftLevelArrow: SKShapeNode? = nil
+    var rightLevelArrow: SKShapeNode? = nil
     
     var levelNode: SKLabelNode? = nil;
     override func didMove(to view: SKView) {
@@ -21,16 +24,25 @@ class GameScene: SKScene {
         
         bg.position = CGPoint(x: 0,y: 0)
         bg.size = frame.size
-        
+        let defsize = CGSize(width:20,height:20)
         for i in 0...12{
             bgcells[i] = Array<BGCell?>(repeating: nil, count: 13)
             for j in 0...12{
-                let thiscell = SKSpriteNode(color: UIColor.darkGray, size: CGSize(width:20,height:20))
+                let thiscell = SKSpriteNode(color: UIColor.darkGray, size: defsize)
                 bgcells[i]![j] = BGCell(node: thiscell)
                 thiscell.position = CGPoint(x: (i-6)*30, y: (j-6)*30 + Int(frame.height) / 5)
                 addChild(thiscell)
             }
         }
+        
+        let tray = SKSpriteNode(color: UIColor.lightGray, size: CGSize(width:frame.width, height: frame.height/2))
+        
+        
+        tray.position = CGPoint(x:0, y: -frame.height/4)
+        addChild(tray)
+        
+        bgcells[ 0]![ 0]!.Node.size = CGSize(width:35,height:35)
+        bgcells[12]![12]!.Node.size = CGSize(width:35,height:35)
         
         levelNode = SKLabelNode(text: "Generating First Level...")
         levelNode?.fontName = "Avenir-Heavy"
@@ -49,6 +61,25 @@ class GameScene: SKScene {
         
         
         levelNode!.position = CGPoint(x: 0, y: 240 + Int(frame.height) / 5)
+        
+        
+        
+        
+        let path = CGMutablePath()
+        path.addLines(between: [CGPoint(x:0,y:80), CGPoint(x:40,y:0), CGPoint(x:-40,y:0)])
+        leftLevelArrow = SKShapeNode(path: path)
+        leftLevelArrow!.fillColor = UIColor.black
+        rightLevelArrow = SKShapeNode(path: path)
+        rightLevelArrow!.fillColor = UIColor.black
+        
+        addChild(leftLevelArrow!)
+        leftLevelArrow!.position = CGPoint(x:levelNode!.position.x-180, y: levelNode!.position.y+20)
+        leftLevelArrow!.zRotation = CGFloat.pi/2
+        
+        addChild(rightLevelArrow!)
+        rightLevelArrow!.position = CGPoint(x:levelNode!.position.x+180, y: levelNode!.position.y+20)
+        rightLevelArrow!.zRotation = -CGFloat.pi/2
+        
         
         pieces = generateLevel(level: level)
         
@@ -73,6 +104,15 @@ class GameScene: SKScene {
         }
         pieces = nil
         
+        if(obstacles!.count > 0)
+        {
+            for i in 0...obstacles!.count-1
+            {
+                obstacles![i]!.removeFromParent()
+            }
+            obstacles = nil
+        }
+        
         for i in 0...bgcells.count-1
         {
             for j in 0...bgcells[i]!.count-1
@@ -80,6 +120,17 @@ class GameScene: SKScene {
                 bgcells[i]![j]!.Clear()
             }
         }
+    }
+    
+    func generateLevel(level: UInt64) -> Array<Array<SKSpriteNode?>?> {
+        
+        let RandomSource = GKMersenneTwisterRandomSource()
+        RandomSource.seed = (1234567890123456789 - (level * level * level * level * 32 / (256+(level*level*level))))
+        
+        let Path = GeneratePath(rand: RandomSource, level: level)
+        let Pieces = GeneratePieces(rand: RandomSource, level: level, path: Path)
+        obstacles = GenerateObstacles(rand: RandomSource, level: level)
+        return Pieces
     }
     
     func GeneratePath(rand: GKRandomSource, level: UInt64) -> Stack<SKSpriteNode>
@@ -95,7 +146,7 @@ class GameScene: SKScene {
         
         assert(GeneratePathPartial(rand: rand, path: Path, a: 0, b: 0, MaxPath: Int(23+level*2)))
         
-        levelNode!.text = "Level " + String(level)
+        levelNode!.text = "Level " + String(level*10000)
         
         return Path
     }
@@ -128,20 +179,34 @@ class GameScene: SKScene {
             let aSel = a+Dirs[i][0]
             let bSel = b+Dirs[i][1]
             
+            //if you try to move into a cell that's off the grid, fail.
             if(aSel < 0 || aSel >= 13 || bSel < 0 || bSel >= 13)
             {
                 continue;
             }
             
+            //OPTIMIZATION CUT
+            //  if you try to move at or near a wall, and you're moving away from the goal, fail because
+            //you've cut off the goal and will fail anyway and you're eating up a lot of time in the process!
+            if((a < 2 || a >= 11) && Dirs[i][1] == -1)
+            {
+                continue
+            }
+            if((b < 2 || b >= 11) && Dirs[i][0] == -1)
+            {
+                continue
+            }
+            
             let testcell = bgcells[aSel]![bSel]!
             
+            //if the cell is occupied, fail
             if(testcell.Occupied())
             {
                 continue
             }
             
             
-            
+            //if the cell is adjacent to another cell, fail.
             var test = true
             for j in 0...3
             {
@@ -151,6 +216,7 @@ class GameScene: SKScene {
                 {
                     continue
                 }
+                //don't count the previous cell in the path.
                 if(a == aTest && b == bTest)
                 {
                     continue
@@ -204,7 +270,10 @@ class GameScene: SKScene {
         {
             AvgPieceSize = 6
         }
-        
+        if(level > 50)
+        {
+            AvgPieceSize = 5
+        }
         
         let NumPieces = path.count / AvgPieceSize
         var Fudging = path.count % AvgPieceSize
@@ -216,7 +285,7 @@ class GameScene: SKScene {
         {
             if(i % 8 == 0)
             {
-                Colors = generateColors(rand: rand)
+                Colors = GenerateColors(rand: rand)
             }
             var FudgingUse = 0
             if(Fudging > 0)
@@ -250,45 +319,8 @@ class GameScene: SKScene {
         return Pieces
     }
     
-    func generateLevel(level: UInt64) -> Array<Array<SKSpriteNode?>?> {
-        
-        let RandomSource = GKMersenneTwisterRandomSource()
-        RandomSource.seed = (1234567890123456789 - (level * level * level * level * 32 / (256+(level*level*level))))
-        
-        let Path = GeneratePath(rand: RandomSource, level: level)
-        return GeneratePieces(rand: RandomSource, level: level, path: Path)
-        /*
-        var Pieces = Array< Array<SKSpriteNode?>? >(repeating: nil, count: 5)
-        
-        var a = 0
-        var b = 0
-        
-        var PieceColors = generateColors(source:RandomSource)
-        
-        for q in 0...4{
-            var ThisPiece = Array<SKSpriteNode?>(repeating: nil, count: 5)
-            for i in 0...4{
-                let thiscell = SKSpriteNode(color: PieceColors[q], size: CGSize(width:30,height:30))
-                ThisPiece[i] = thiscell
-                thiscell.position = bgcells[a]![b]!.position
-                addChild(thiscell)
-                
-                if((RandomDistribution.nextInt() == 1 && a < 12) || b == 12)
-                {
-                    a+=1
-                }
-                else
-                {
-                    b+=1
-                }
-            }
-            Pieces[q] = ThisPiece
-        }
-        return Pieces
-        */
-    }
     
-    func generateColors(rand: GKRandomSource) -> Array<UIColor>
+    func GenerateColors(rand: GKRandomSource) -> Array<UIColor>
     {
         let IndexDist = GKRandomDistribution(randomSource: rand, lowestValue: 0, highestValue: 7)
         var ColArr = [UIColor.red, UIColor.blue, UIColor.green, UIColor.yellow, UIColor.purple, UIColor.cyan, UIColor.orange, UIColor.magenta]
@@ -303,6 +335,42 @@ class GameScene: SKScene {
         return ColArr
     }
     
+    func GenerateObstacles(rand: GKRandomSource, level: UInt64) -> Array<SKSpriteNode?>
+    {
+        if(level < 10)
+        {
+            return []
+        }
+        else
+        {
+            var NumObstacles = 10
+            if(level > 25)
+            {
+                NumObstacles = 15
+            }
+            if(level > 35)
+            {
+                NumObstacles = 20
+            }
+            let Dist = GKRandomDistribution(randomSource: rand, lowestValue:0, highestValue:12)
+            var Ret = Array<SKSpriteNode?>(repeating: nil, count: NumObstacles)
+            for i in 0...NumObstacles-1
+            {
+                let obstacle = SKSpriteNode(color: UIColor.black, size: CGSize(width:25,height:25))
+                var testcell = bgcells[0]![0]!
+                while testcell.Occupied()
+                {
+                    testcell = bgcells[Dist.nextInt()]![Dist.nextInt()]!
+                }
+                obstacle.position = testcell.Node.position
+                addChild(obstacle)
+                testcell.Accept(node: obstacle)
+                Ret[i] = obstacle
+            }
+            return Ret
+        }
+    }
+    
     func touchDown(atPoint pos : CGPoint) {
         
     }
@@ -312,7 +380,7 @@ class GameScene: SKScene {
     }
     
     func touchUp(atPoint pos : CGPoint) {
-        nextLevel()
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {        
