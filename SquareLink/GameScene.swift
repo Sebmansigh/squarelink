@@ -511,12 +511,96 @@ class GameScene: SKScene {
         {
             if(!Piece.Locked())
             {
+                GameScene.postText(text: "Pieces not used")
                 return
+                //every piece must be used
             }
         }
-        //  Try to form a path of length equal to the sum of the size of all pieces,
-        //returning if you fail.
+        if(!( bgcells[0]![0]!.Occupied()))
+        {
+            GameScene.postText(text: "Starting cell empty")
+            return
+            
+            //path must contain the starting cell!
+        }
+        //  Do a faux flood-fill to determine if the final path reaches the goal without splitting
         
+        var aPrev = -1
+        var bPrev = -1
+        var aPos = 0
+        var bPos = 0
+        while(true)
+        {
+            let dirVecs = [(1,0),(0,1),(-1,0),(0,-1)]
+            
+            var winVec: (Int,Int)? = nil
+            
+            for vec in dirVecs
+            {
+                let aTest = aPos+vec.0
+                let bTest = bPos+vec.1
+                
+                if(aTest < 0 || aTest >= 13 || bTest < 0 || bTest >= 13)
+                {
+                    continue //don't check cells that don't exist
+                }
+                
+                if(aTest == aPrev && bTest == bPrev)
+                {
+                    continue //don't check the previous entry in the path
+                }
+                
+                let testCell = bgcells[aTest]![bTest]!
+                
+                if(testCell.Occupied() )
+                {
+                    var ob = false
+                    for o in obstacles!
+                    {
+                        if(o == testCell.Occupant!)
+                        {
+                            ob = true
+                            print("obstacle found")
+                            break
+                        }
+                    }
+                    if(ob)
+                    {
+                        continue //You can't traverse obstacles
+                    }
+                    //Well, It isn't an obstacle, so it's a piece!
+                    print("link from " + String(aPos) + ", " + String(bPos) + " to "+String(aTest) + ", " + String(bTest))
+                    if(winVec == nil)
+                    {
+                        //This is the first one, we're good!
+                        winVec = vec
+                    }
+                    else
+                    {
+                        GameScene.postText(text: "Path splits at "+String(aPos)+", "+String(bPos))
+                        //This is the second one, meaning the path splits, meaning the user hasn't won yet
+                        return
+                    }
+                }
+            }
+            
+            if(winVec == nil)
+            {
+                GameScene.postText(text: "Path ends abruptly")
+                return
+            }
+            //Move into the next square
+            aPrev = aPos
+            bPrev = bPos
+            aPos += winVec!.0
+            bPos += winVec!.1
+            
+            if(aPos == 12 && bPos == 12)
+            {
+                break //You've made a single, non-branching path from corner to corner using all of the pieces
+            }
+            //else, continue the while loop...
+        }
         
         //You've satisfied the conditions and can move on to the next level
         
