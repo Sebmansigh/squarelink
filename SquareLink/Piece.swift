@@ -17,8 +17,8 @@ class Piece
     private var positions: Array<(Int,Int)>
     private var gamePosition: (Int,Int)?
     private var UIPosition: CGPoint
-    private var vbounds: (Int,Int)
-    private var hbounds: (Int,Int)
+    var vbounds: (Int,Int)
+    var hbounds: (Int,Int)
     
     init(baseNode: SKSpriteNode)
     {

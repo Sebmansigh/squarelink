@@ -32,6 +32,43 @@ class GameScene: SKScene {
     var UINodes: Array<SKNode> = [textNode]
     var levelNode: SKLabelNode? = nil
     
+    func GetDocumentURL(fileName: String) -> URL?
+    {
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor:nil, create:false)
+            return documentDirectory.appendingPathComponent(fileName)
+        }
+        catch let error as NSError {
+            print("Ooops! Something went wrong: \(error)")
+            return nil
+        }
+    }
+    
+    func SaveGameData()
+    {
+        do {
+            let fileURL = GetDocumentURL(fileName: "progressStandard.txt")
+            // Save maxLevel to a file.
+            try String(maxLevel).write(to: fileURL!, atomically: true, encoding: String.Encoding.utf8)
+        }
+        catch let error as NSError {
+            print("Ooops! Something went wrong: \(error)")
+        }
+    }
+    
+    func LoadGameData()
+    {
+        do {
+            // Get maxLevel from a file
+            let fileURL = GetDocumentURL(fileName: "progressStandard.txt")
+            let data = try String(contentsOf:fileURL!, encoding: String.Encoding.utf8)
+            maxLevel = UInt64(data)!
+        }
+        catch let error as NSError {
+            print("Ooops! Something went wrong: \(error)")
+            maxLevel = 1
+        }
+    }
     
     
     override func didMove(to view: SKView) {
@@ -93,6 +130,8 @@ class GameScene: SKScene {
         UINodes.append(leftLevelArrow!)
         UINodes.append(rightLevelArrow!)
         
+        LoadGameData()
+        
         LoadLevel(maxLevel)
         RedrawLevelArrows()
         BeginLoadedLevel()
@@ -123,7 +162,14 @@ class GameScene: SKScene {
         level = newLevel
         pieces = GenerateLevel(level: level)
         BeginLoadedLevel()
-        GameScene.postText(text: "")
+        if(level == 1)
+        {
+            GameScene.postText(text: "Build a path from corner to corner!")
+        }
+        else
+        {
+            GameScene.postText(text: "")
+        }
     }
     
     func clearLevel()
@@ -161,8 +207,18 @@ class GameScene: SKScene {
     func GenerateLevel(level: UInt64) -> Array<Piece> {
         
         let RandomSource = GKMersenneTwisterRandomSource()
+        if(level == 1)
+        {
+            RandomSource.seed = 0
+        }
+        else if(level == 3)
+        {
+            RandomSource.seed = UInt64.max
+        }
+        else
+        {
         RandomSource.seed = (1234567890123456789 - (level * level * level * level * 32 / (256+(level*level*level))))
-        
+        }
         let Path = GeneratePath(rand: RandomSource, level: level)
         let Pieces = GeneratePieces(rand: RandomSource, level: level, path: Path)
         obstacles = GenerateObstacles(rand: RandomSource, level: level)
@@ -410,14 +466,19 @@ class GameScene: SKScene {
         }
     }
     
-    func BeginLoadedLevel() {
+    func BeginLoadedLevel()
+    {
+        var radius = frame.height/8
+        radius += CGFloat(5.0*Double(pieces!.count-3))
         for i in 0...pieces!.count-1
         {
             let rot = 2*CGFloat.pi*CGFloat(i)/CGFloat(pieces!.count)
-            let radius = frame.height/8
             let Piece = pieces![i]
-            Piece.InitialPosition = CGPoint(x: sin(rot)*radius, y: cos(rot)*radius - frame.height/4 + 90)
-            Piece.MoveToPoint(point: Piece.InitialPosition)
+            var posX = sin(rot)*radius
+            var posY = cos(rot)*radius - frame.height/4
+            posX += 15.0 * CGFloat( Piece.hbounds.1 - Piece.hbounds.0 )
+            posY += 15.0 * CGFloat( Piece.vbounds.1 - Piece.vbounds.0 )
+            Piece.MoveToPoint(x: posX , y: posY)
             for _cellarray in bgcells
             {
                 for Cell in _cellarray!
@@ -609,6 +670,7 @@ class GameScene: SKScene {
         {
             maxLevel += 1
             RedrawLevelArrows()
+            SaveGameData()
         }
         WinState = true
     }
