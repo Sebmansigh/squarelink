@@ -29,7 +29,9 @@ class GameScene: SKScene {
     var leftLevelArrow: SKShapeNode? = nil
     var rightLevelArrow: SKShapeNode? = nil
     var gridholder: SKSpriteNode? = nil
-    var UINodes: Array<SKNode> = [textNode]
+    var levelClearButtonNode : SKShapeNode?
+    var levelClearLabelNode : SKLabelNode?
+    var UINodes: Array<SKNode> = [GameScene.textNode]
     var levelNode: SKLabelNode? = nil
     
     func GetDocumentURL(fileName: String) -> URL?
@@ -105,7 +107,7 @@ class GameScene: SKScene {
         bgcells[12]![12]!.Node.size = CGSize(width:35,height:35)
         
         levelNode = SKLabelNode(text: "Loading...")
-        levelNode?.fontName = "Avenir-Heavy"
+        levelNode!.fontName = "Avenir-Heavy"
         levelNode!.fontColor = UIColor.black
         levelNode!.fontSize = 64
         levelNode!.position = CGPoint(x: 0, y: 240 + Int(frame.height) / 5)
@@ -113,10 +115,10 @@ class GameScene: SKScene {
         
         
         
-        let path = CGMutablePath()
-        path.addLines(between: [CGPoint(x:0,y:80), CGPoint(x:40,y:0), CGPoint(x:-40,y:0), CGPoint(x:0,y:80)])
-        leftLevelArrow = SKShapeNode(path: path)
-        rightLevelArrow = SKShapeNode(path: path)
+        let triPath = CGMutablePath()
+        triPath.addLines(between: [CGPoint(x:0,y:80), CGPoint(x:40,y:0), CGPoint(x:-40,y:0), CGPoint(x:0,y:80)])
+        leftLevelArrow = SKShapeNode(path: triPath)
+        rightLevelArrow = SKShapeNode(path: triPath)
         
         
         addChild(leftLevelArrow!)
@@ -129,6 +131,25 @@ class GameScene: SKScene {
         
         UINodes.append(leftLevelArrow!)
         UINodes.append(rightLevelArrow!)
+        
+        
+        let rectPath = CGMutablePath()
+        let halfWidth = 200
+        let halfHeight = 50
+        rectPath.addLines(between: [CGPoint(x:-halfWidth,y:-halfHeight),CGPoint(x:halfWidth,y:-halfHeight), CGPoint(x:halfWidth,y:halfHeight), CGPoint(x:-halfWidth,y:halfHeight), CGPoint(x:-halfWidth,y:-halfHeight)])
+        levelClearButtonNode = SKShapeNode(path: rectPath)
+        levelClearButtonNode!.position = CGPoint(x: 0, y: -Int(frame.height) / 5)
+        levelClearButtonNode!.fillColor = UIColor.white
+        levelClearButtonNode!.strokeColor = UIColor.black
+        levelClearButtonNode!.lineWidth = 3
+        UINodes.append(levelClearButtonNode!)
+        
+        levelClearLabelNode = SKLabelNode(text: "Next Level")
+        levelClearLabelNode!.fontName = "Avenir-Heavy"
+        levelClearLabelNode!.fontColor = UIColor.black
+        levelClearLabelNode!.fontSize = 64
+        levelClearLabelNode!.position = CGPoint(x: levelClearButtonNode!.position.x, y: levelClearButtonNode!.position.y-20)
+        UINodes.append(levelClearLabelNode!)
         
         LoadGameData()
         
@@ -143,6 +164,7 @@ class GameScene: SKScene {
         GameScene.textNode.fontSize = 32
         GameScene.textNode.position = CGPoint(x: 0, y: 300 + Int(frame.height) / 5)
         addChild(GameScene.textNode)
+        
     }
     
     func LoadNextLevel()
@@ -157,6 +179,8 @@ class GameScene: SKScene {
     
     func LoadLevel(_ newLevel: UInt64)
     {
+        levelClearButtonNode!.removeFromParent()
+        levelClearLabelNode!.removeFromParent()
         GameScene.postText(text: "Loading...")
         clearLevel()
         level = newLevel
@@ -666,6 +690,8 @@ class GameScene: SKScene {
         //You've satisfied the conditions and can move on to the next level
         
         GameScene.postText(text: "Level Complete!")
+        addChild(levelClearButtonNode!)
+        addChild(levelClearLabelNode!)
         if(level == maxLevel)
         {
             maxLevel += 1
@@ -700,7 +726,7 @@ class GameScene: SKScene {
             LoadPrevLevel()
             RedrawLevelArrows()
         }
-        else if(nodesUnderTouch.contains(rightLevelArrow!) && level < maxLevel)
+        else if(nodesUnderTouch.contains(levelClearButtonNode!))||(nodesUnderTouch.contains(rightLevelArrow!) && level < maxLevel)
         {
             LoadNextLevel()
             RedrawLevelArrows()
