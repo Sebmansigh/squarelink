@@ -511,14 +511,14 @@ class GameScene: SKScene {
         {
             if(!Piece.Locked())
             {
-                GameScene.postText(text: "Pieces not used")
+                //GameScene.postText(text: "Pieces not used")
                 return
                 //every piece must be used
             }
         }
         if(!( bgcells[0]![0]!.Occupied()))
         {
-            GameScene.postText(text: "Starting cell empty")
+            //GameScene.postText(text: "Starting cell empty")
             return
             
             //path must contain the starting cell!
@@ -577,7 +577,7 @@ class GameScene: SKScene {
                     }
                     else
                     {
-                        GameScene.postText(text: "Path splits at "+String(aPos)+", "+String(bPos))
+                        //GameScene.postText(text: "Path splits at "+String(aPos)+", "+String(bPos))
                         //This is the second one, meaning the path splits, meaning the user hasn't won yet
                         return
                     }
@@ -586,7 +586,7 @@ class GameScene: SKScene {
             
             if(winVec == nil)
             {
-                GameScene.postText(text: "Path ends abruptly")
+                //GameScene.postText(text: "Path ends abruptly")
                 return
             }
             //Move into the next square
