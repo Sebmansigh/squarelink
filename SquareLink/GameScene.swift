@@ -11,17 +11,25 @@ import GameplayKit
 import GameKit
 
 class GameScene: SKScene {
+    
+    private static var debugNode: SKLabelNode = SKLabelNode(text: "")
+    
+    static func postDebug(text: String)
+    {
+        debugNode.text = text
+    }
+    
     var bgcells = Array< Array<BGCell?>? >(repeating: nil, count: 13)
     var pieces: Array<Piece>? = nil
     var obstacles: Array<SKSpriteNode?>? = nil
     var level: UInt64 = 0
     var leftLevelArrow: SKShapeNode? = nil
     var rightLevelArrow: SKShapeNode? = nil
+    var gridholder: SKSpriteNode? = nil
     
-    var UINodes: Array<SKNode> = []
+    var UINodes: Array<SKNode> = [debugNode]
     
-    var levelNode: SKLabelNode? = nil;
-    
+    var levelNode: SKLabelNode? = nil
     
     
     
@@ -30,6 +38,11 @@ class GameScene: SKScene {
         bg.position = CGPoint(x: 0,y: 0)
         bg.size = frame.size
         
+        gridholder = SKSpriteNode(color: UIColor.lightGray, size: CGSize(width: 400, height: 400))
+        UINodes.append(gridholder!)
+        
+        gridholder!.position = CGPoint(x:0, y: frame.height/5)
+        addChild(gridholder!)
         
         UINodes.append(bg)
         let defsize = CGSize(width:20,height:20)
@@ -53,7 +66,7 @@ class GameScene: SKScene {
         bgcells[ 0]![ 0]!.Node.size = CGSize(width:35,height:35)
         bgcells[12]![12]!.Node.size = CGSize(width:35,height:35)
         
-        levelNode = SKLabelNode(text: "Generating First Level...")
+        levelNode = SKLabelNode(text: "Loading...")
         levelNode?.fontName = "Avenir-Heavy"
         levelNode!.fontColor = UIColor.black
         levelNode!.fontSize = 64
@@ -85,6 +98,12 @@ class GameScene: SKScene {
         BeginLoadedLevel()
         
         addChild(levelNode!)
+        
+        GameScene.debugNode.fontName = "Avenir-Heavy"
+        GameScene.debugNode.fontColor = UIColor.black
+        GameScene.debugNode.fontSize = 32
+        GameScene.debugNode.position = CGPoint(x: 0, y: 300 + Int(frame.height) / 5)
+        addChild(GameScene.debugNode)
     }
     
     func LoadNextLevel()
@@ -174,7 +193,7 @@ class GameScene: SKScene {
             return false;
         }
         
-        // Shuffle an array of direction vectors ( 2 swaps only, to prioritize up-left! )
+        // Shuffle an array of direction vectors ( 2 swaps only, to prioritize the up & right directions! )
         var Dirs = [[0,1],[1,0],[0,-1],[-1,0]]
         let Dist = GKRandomDistribution(randomSource: rand, lowestValue: 0, highestValue: 3)
         for _ in 0...1
@@ -199,7 +218,7 @@ class GameScene: SKScene {
             
             //OPTIMIZATION CUT
             //  if you try to move at or near a wall, and you're moving away from the goal, fail because
-            //you've cut off the goal and will fail anyway and you're eating up a lot of time in the process!
+            //you've cut off the goal and will fail anyway, eating up a lot of time in the process!
             if((a < 2 || a >= 11) && Dirs[i][1] == -1)
             {
                 continue
@@ -320,6 +339,7 @@ class GameScene: SKScene {
             }
             var prevcell = path.PopForce()
             let ThisPiece = Piece(baseNode: prevcell)
+            ThisPiece.SetGamePosition(posX: 6+Int(gridholder!.position.x-prevcell.position.x)/30, posY: 6+Int(gridholder!.position.y-prevcell.position.y)/30)
             for _ in 1...AvgPieceSize+FudgingUse-1
             {
                 let thiscell = path.PopForce();
@@ -390,7 +410,9 @@ class GameScene: SKScene {
             let rot = 2*CGFloat.pi*CGFloat(i)/CGFloat(pieces!.count)
             let radius = frame.height/8
             let Piece = pieces![i]
-            Piece.MoveToPoint(x: sin(rot)*radius ,y: cos(rot)*radius - frame.height/4 + 90)
+            Piece.InitialPosition = CGPoint(x: sin(rot)*radius, y: cos(rot)*radius - frame.height/4 + 90)
+            Piece.Unlock(grid: bgcells)
+            Piece.MoveToPoint(point: Piece.InitialPosition)
         }
     }
     
@@ -429,7 +451,7 @@ class GameScene: SKScene {
     
     var touchStarted: CGPoint? = nil
     var pieceSelected: Piece? = nil
-    
+    //var pieceClone: Piece? = nil
     func touchDown(touch: UITouch, atPoint pos : CGPoint) {
         let nodesUnderTouch = nodes(at: pos)
         // check for piece selected
@@ -439,6 +461,7 @@ class GameScene: SKScene {
         {
             touchStarted = CGPoint(x: pos.x-P!.GetUIPosition().x, y: pos.y-P!.GetUIPosition().y)
             pieceSelected = P
+            pieceSelected!.SetZPosition(zpos: 1.0)
             //Don't interact with UI if a piece has been selected
             return
         }
@@ -448,12 +471,68 @@ class GameScene: SKScene {
         if(pieceSelected != nil)
         {
             pieceSelected!.MoveToPoint(x: pos.x-touchStarted!.x, y: pos.y-touchStarted!.y)
+            
+            let OG = pieceSelected!.OverGrid(gridholder: gridholder!)
+            
+            if(OG != nil)
+            {
+                let baseSquare : BGCell = bgcells[OG!.0]![OG!.1]!
+                pieceSelected!.MoveToPoint(point: baseSquare.Node.position)
+            }
+            /*
+            var OverGrid = true
+            for node in pieceSelected!.GetNodes()
+            {
+                if(node.position.x < gridholder!.position.x-185 || node.position.x > gridholder!.position.x+185 || node.position.y < gridholder!.position.y-185 || node.position.y > gridholder!.position.y+185)
+                {
+                    OverGrid = false
+                }
+            }
+            if(OverGrid)
+            {
+                let pos = pieceSelected!.GetNodes()[0].position
+                let xIndex = 6+Int(pos.x-gridholder!.position.x)/30
+                let yIndex = 6+Int(pos.y-gridholder!.position.y)/30
+                debugNode!.text = String(describing: xIndex) + " , " + String(describing: yIndex)
+                
+                let baseSquare : BGCell = bgcells[xIndex]![yIndex]!
+                pieceSelected!.MoveToPoint(point: baseSquare.Node.position)
+                //if(pieceClone == nil)
+                //{
+                //    pieceClone = pieceSelected!.Clone()
+                //}
+                //pieceClone!.MoveToPoint(x: pos.x-20, y: pos.y-20)
+            }
+            else
+            {
+                //pieceClone?.RemoveFromUI()
+                //pieceClone = nil
+            }
+            */
         }
     }
     
     func touchUp(touch: UITouch, atPoint pos : CGPoint) {
+        pieceSelected?.SetZPosition(zpos:0.0)
+        
+        let OG = pieceSelected?.OverGrid(gridholder: gridholder!)
+        
+        if(OG != nil)
+        {
+            if(pieceSelected!.TryLock(indecies: OG!, grid: bgcells))
+            {
+               //Test for win condition
+            }
+            else
+            {
+                pieceSelected!.MoveToPoint(point: pieceSelected!.InitialPosition)
+            }
+        }
+        
         pieceSelected = nil
         touchStarted = nil
+        //pieceClone?.RemoveFromUI()
+        //pieceClone = nil
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {        

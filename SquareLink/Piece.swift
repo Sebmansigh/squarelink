@@ -11,10 +11,14 @@ import SpriteKit
 
 class Piece
 {
+    var InitialPosition = CGPoint(x: 0,y: 0)
+    
     private var Nodes: Array<SKSpriteNode>
     private var positions: Array<(Int,Int)>
     private var gamePosition: (Int,Int)?
     private var UIPosition: CGPoint
+    private var vbounds: (Int,Int)
+    private var hbounds: (Int,Int)
     
     init(baseNode: SKSpriteNode)
     {
@@ -22,7 +26,10 @@ class Piece
         positions = [(0,0)]
         gamePosition = nil
         UIPosition = CGPoint(x:0,y:0)
+        vbounds = (0,0)
+        hbounds = (0,0)
     }
+    
     func GetPosition(index: Int) -> (Int,Int)
     {
         return (positions[index].0+gamePosition!.0, positions[index].1+gamePosition!.1)
@@ -47,6 +54,22 @@ class Piece
         Nodes.append(next)
         let NextX = positions[positions.count-1].0+dirX
         let NextY = positions[positions.count-1].1+dirY
+        if(NextX < hbounds.0)
+        {
+            hbounds.0 = NextX
+        }
+        else if(NextX > hbounds.1)
+        {
+            hbounds.1 = NextX
+        }
+        if(NextY < vbounds.0)
+        {
+            vbounds.0 = NextY
+        }
+        else if(NextY > vbounds.1)
+        {
+            vbounds.1 = NextY
+        }
         positions.append((NextX,NextY))
     }
     
@@ -101,5 +124,87 @@ class Piece
     func GetUIPosition() -> CGPoint
     {
         return UIPosition
+    }
+    
+    func GetNodes() -> Array<SKSpriteNode>
+    {
+        return Nodes
+    }
+    
+    func SetZPosition(zpos: CGFloat)
+    {
+        for Node in Nodes
+        {
+            Node.zPosition = zpos
+        }
+    }
+    
+    func OverGrid(gridholder: SKSpriteNode) -> (Int,Int)?
+    {
+        let allowance:CGFloat = 210
+        for node in Nodes
+        {
+            if((node.position.x < gridholder.position.x-allowance) || (node.position.x > gridholder.position.x+allowance) || (node.position.y < gridholder.position.y-allowance) || (node.position.y > gridholder.position.y+allowance))
+            {
+                return nil
+            }
+        }
+        
+        let pos = Nodes[0].position
+        var xIndex = 6+Int(pos.x-gridholder.position.x+15)/30
+        var yIndex = 6+Int(pos.y-gridholder.position.y+15)/30
+        
+        if(xIndex < -hbounds.0)
+        {
+            xIndex = -hbounds.0
+        }
+        else if(xIndex > 12-hbounds.1)
+        {
+            xIndex = 12-hbounds.1
+        }
+        if(yIndex < -vbounds.0)
+        {
+            yIndex = -vbounds.0
+        }
+        else if(yIndex > 12-vbounds.1)
+        {
+            yIndex = 12-vbounds.1
+        }
+        
+        return (xIndex,yIndex)
+    }
+    
+    func TryLock(indecies: (Int,Int), grid: Array<Array<BGCell?>?>) -> Bool
+    {
+        for i in 0...Nodes.count-1
+        {
+            let Pos = positions[i]
+            if(grid[indecies.0+Pos.0]![indecies.1+Pos.1]!.Occupied())
+            {
+                GameScene.postDebug(text: String(indecies.0+Pos.0)+", "+String(indecies.1+Pos.1))
+                return false
+            }
+        }
+        // All positions free!
+        for i in 0...Nodes.count-1
+        {
+            let Pos = positions[i]
+            grid[indecies.0+Pos.0]![indecies.1+Pos.1]!.Accept(node: Nodes[i])
+        }
+        
+        gamePosition = indecies
+        return true
+    }
+    
+    func Unlock(grid: Array<Array<BGCell?>?>)
+    {
+        if(gamePosition != nil)
+        {
+            for i in 0...Nodes.count-1
+            {
+                let Pos = positions[i]
+                grid[gamePosition!.0+Pos.0]![gamePosition!.1+Pos.1]!.Clear()
+            }
+        }
     }
 }
