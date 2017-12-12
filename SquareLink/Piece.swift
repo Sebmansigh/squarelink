@@ -151,8 +151,8 @@ class Piece
         }
         
         let pos = Nodes[0].position
-        var xIndex = 6+Int(pos.x-gridholder.position.x+15)/30
-        var yIndex = 6+Int(pos.y-gridholder.position.y+15)/30
+        var xIndex = 6+Int(ceil(pos.x-gridholder.position.x))/30
+        var yIndex = 6+Int(ceil(pos.y-gridholder.position.y))/30
         
         if(xIndex < -hbounds.0)
         {
@@ -174,14 +174,18 @@ class Piece
         return (xIndex,yIndex)
     }
     
-    func TryLock(indecies: (Int,Int), grid: Array<Array<BGCell?>?>) -> Bool
+    func TryLock(gridholder: SKSpriteNode, grid: Array<Array<BGCell?>?>) -> Bool
     {
+        let OG = OverGrid(gridholder: gridholder)
+        if(OG == nil)
+        {
+            return false
+        }
         for i in 0...Nodes.count-1
         {
             let Pos = positions[i]
-            if(grid[indecies.0+Pos.0]![indecies.1+Pos.1]!.Occupied())
+            if(grid[OG!.0+Pos.0]![OG!.1+Pos.1]!.Occupied())
             {
-                GameScene.postDebug(text: String(indecies.0+Pos.0)+", "+String(indecies.1+Pos.1))
                 return false
             }
         }
@@ -189,10 +193,12 @@ class Piece
         for i in 0...Nodes.count-1
         {
             let Pos = positions[i]
-            grid[indecies.0+Pos.0]![indecies.1+Pos.1]!.Accept(node: Nodes[i])
+            grid[OG!.0+Pos.0]![OG!.1+Pos.1]!.Accept(node: Nodes[i])
         }
         
-        gamePosition = indecies
+        //MoveToPoint(point: grid[OG!.0]![OG!.1]!.Node.position)
+        gamePosition = OG!
+        
         return true
     }
     
@@ -205,6 +211,13 @@ class Piece
                 let Pos = positions[i]
                 grid[gamePosition!.0+Pos.0]![gamePosition!.1+Pos.1]!.Clear()
             }
+            
+            gamePosition = nil
         }
+    }
+    
+    func Locked() -> Bool
+    {
+        return gamePosition != nil
     }
 }

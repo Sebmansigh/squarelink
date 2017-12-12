@@ -12,23 +12,24 @@ import GameKit
 
 class GameScene: SKScene {
     
-    private static var debugNode: SKLabelNode = SKLabelNode(text: "")
+    private static var textNode: SKLabelNode = SKLabelNode(text: "")
     
-    static func postDebug(text: String)
+    static func postText(text: String)
     {
-        debugNode.text = text
+        textNode.text = text
     }
     
     var bgcells = Array< Array<BGCell?>? >(repeating: nil, count: 13)
     var pieces: Array<Piece>? = nil
     var obstacles: Array<SKSpriteNode?>? = nil
     var level: UInt64 = 0
+    var maxLevel: UInt64 = 1
+    var WinState = false
+    
     var leftLevelArrow: SKShapeNode? = nil
     var rightLevelArrow: SKShapeNode? = nil
     var gridholder: SKSpriteNode? = nil
-    
-    var UINodes: Array<SKNode> = [debugNode]
-    
+    var UINodes: Array<SKNode> = [textNode]
     var levelNode: SKLabelNode? = nil
     
     
@@ -76,11 +77,10 @@ class GameScene: SKScene {
         
         
         let path = CGMutablePath()
-        path.addLines(between: [CGPoint(x:0,y:80), CGPoint(x:40,y:0), CGPoint(x:-40,y:0)])
+        path.addLines(between: [CGPoint(x:0,y:80), CGPoint(x:40,y:0), CGPoint(x:-40,y:0), CGPoint(x:0,y:80)])
         leftLevelArrow = SKShapeNode(path: path)
-        leftLevelArrow!.fillColor = UIColor.black
         rightLevelArrow = SKShapeNode(path: path)
-        rightLevelArrow!.fillColor = UIColor.black
+        
         
         addChild(leftLevelArrow!)
         leftLevelArrow!.position = CGPoint(x:levelNode!.position.x-180, y: levelNode!.position.y+20)
@@ -93,35 +93,42 @@ class GameScene: SKScene {
         UINodes.append(leftLevelArrow!)
         UINodes.append(rightLevelArrow!)
         
-        LoadLevel(1)
-        
+        LoadLevel(maxLevel)
+        RedrawLevelArrows()
         BeginLoadedLevel()
         
         addChild(levelNode!)
         
-        GameScene.debugNode.fontName = "Avenir-Heavy"
-        GameScene.debugNode.fontColor = UIColor.black
-        GameScene.debugNode.fontSize = 32
-        GameScene.debugNode.position = CGPoint(x: 0, y: 300 + Int(frame.height) / 5)
-        addChild(GameScene.debugNode)
+        GameScene.textNode.fontName = "Avenir-Heavy"
+        GameScene.textNode.fontColor = UIColor.black
+        GameScene.textNode.fontSize = 32
+        GameScene.textNode.position = CGPoint(x: 0, y: 300 + Int(frame.height) / 5)
+        addChild(GameScene.textNode)
     }
     
     func LoadNextLevel()
     {
         LoadLevel(level+1)
-        
+    }
+    
+    func LoadPrevLevel()
+    {
+        LoadLevel(level-1)
     }
     
     func LoadLevel(_ newLevel: UInt64)
     {
+        GameScene.postText(text: "Loading...")
         clearLevel()
         level = newLevel
         pieces = GenerateLevel(level: level)
         BeginLoadedLevel()
+        GameScene.postText(text: "")
     }
     
     func clearLevel()
     {
+        WinState = false
         if(level == 0)
         {
             return
@@ -339,7 +346,6 @@ class GameScene: SKScene {
             }
             var prevcell = path.PopForce()
             let ThisPiece = Piece(baseNode: prevcell)
-            ThisPiece.SetGamePosition(posX: 6+Int(gridholder!.position.x-prevcell.position.x)/30, posY: 6+Int(gridholder!.position.y-prevcell.position.y)/30)
             for _ in 1...AvgPieceSize+FudgingUse-1
             {
                 let thiscell = path.PopForce();
@@ -411,13 +417,39 @@ class GameScene: SKScene {
             let radius = frame.height/8
             let Piece = pieces![i]
             Piece.InitialPosition = CGPoint(x: sin(rot)*radius, y: cos(rot)*radius - frame.height/4 + 90)
-            Piece.Unlock(grid: bgcells)
             Piece.MoveToPoint(point: Piece.InitialPosition)
+            for _cellarray in bgcells
+            {
+                for Cell in _cellarray!
+                {
+                    let Occ = Cell!.Occupant
+                    if(Occ != nil)
+                    {
+                        var ob = false
+                        for o in obstacles!
+                        {
+                            if(o! == Occ!)
+                            {
+                                ob = true
+                                break
+                            }
+                        }
+                        if(!ob)
+                        {
+                            Cell!.Clear()
+                        }
+                    }
+                }
+            }
         }
     }
     
     func getSelectedPieceFromNodes(nodes: [SKNode]) -> Piece?
     {
+        if(WinState)
+        {
+            return nil //Don't let the player move pieces from a winning board
+        }
         if(pieces == nil)
         {
             return nil
@@ -449,6 +481,56 @@ class GameScene: SKScene {
         return nil
     }
     
+    func RedrawLevelArrows()
+    {
+        if(level == 1)
+        {
+            leftLevelArrow!.strokeColor = UIColor.black
+            leftLevelArrow!.fillColor = UIColor.clear
+            leftLevelArrow!.lineWidth = 3
+        }
+        else
+        {
+            leftLevelArrow!.fillColor = UIColor.black
+        }
+        if(level == maxLevel)
+        {
+            rightLevelArrow!.strokeColor = UIColor.black
+            rightLevelArrow!.fillColor = UIColor.clear
+            rightLevelArrow!.lineWidth = 3
+        }
+        else
+        {
+            rightLevelArrow!.fillColor = UIColor.black
+        }
+    }
+    
+    func CheckForVictory()
+    {
+        for Piece in pieces!
+        {
+            if(!Piece.Locked())
+            {
+                return
+            }
+        }
+        //  Try to form a path of length equal to the sum of the size of all pieces,
+        //returning if you fail.
+        
+        
+        //You've satisfied the conditions and can move on to the next level
+        
+        GameScene.postText(text: "Level Complete!")
+        if(level == maxLevel)
+        {
+            maxLevel += 1
+            RedrawLevelArrows()
+        }
+        WinState = true
+    }
+    
+    
+    
     var touchStarted: CGPoint? = nil
     var pieceSelected: Piece? = nil
     //var pieceClone: Piece? = nil
@@ -462,8 +544,20 @@ class GameScene: SKScene {
             touchStarted = CGPoint(x: pos.x-P!.GetUIPosition().x, y: pos.y-P!.GetUIPosition().y)
             pieceSelected = P
             pieceSelected!.SetZPosition(zpos: 1.0)
+            pieceSelected!.Unlock(grid: bgcells)
             //Don't interact with UI if a piece has been selected
             return
+        }
+        
+        if(nodesUnderTouch.contains(leftLevelArrow!) && level > 1)
+        {
+            LoadPrevLevel()
+            RedrawLevelArrows()
+        }
+        else if(nodesUnderTouch.contains(rightLevelArrow!) && level < maxLevel)
+        {
+            LoadNextLevel()
+            RedrawLevelArrows()
         }
     }
     
@@ -479,36 +573,6 @@ class GameScene: SKScene {
                 let baseSquare : BGCell = bgcells[OG!.0]![OG!.1]!
                 pieceSelected!.MoveToPoint(point: baseSquare.Node.position)
             }
-            /*
-            var OverGrid = true
-            for node in pieceSelected!.GetNodes()
-            {
-                if(node.position.x < gridholder!.position.x-185 || node.position.x > gridholder!.position.x+185 || node.position.y < gridholder!.position.y-185 || node.position.y > gridholder!.position.y+185)
-                {
-                    OverGrid = false
-                }
-            }
-            if(OverGrid)
-            {
-                let pos = pieceSelected!.GetNodes()[0].position
-                let xIndex = 6+Int(pos.x-gridholder!.position.x)/30
-                let yIndex = 6+Int(pos.y-gridholder!.position.y)/30
-                debugNode!.text = String(describing: xIndex) + " , " + String(describing: yIndex)
-                
-                let baseSquare : BGCell = bgcells[xIndex]![yIndex]!
-                pieceSelected!.MoveToPoint(point: baseSquare.Node.position)
-                //if(pieceClone == nil)
-                //{
-                //    pieceClone = pieceSelected!.Clone()
-                //}
-                //pieceClone!.MoveToPoint(x: pos.x-20, y: pos.y-20)
-            }
-            else
-            {
-                //pieceClone?.RemoveFromUI()
-                //pieceClone = nil
-            }
-            */
         }
     }
     
@@ -519,9 +583,9 @@ class GameScene: SKScene {
         
         if(OG != nil)
         {
-            if(pieceSelected!.TryLock(indecies: OG!, grid: bgcells))
+            if(pieceSelected!.TryLock(gridholder: gridholder!, grid: bgcells))
             {
-               //Test for win condition
+                CheckForVictory()
             }
             else
             {
@@ -531,8 +595,6 @@ class GameScene: SKScene {
         
         pieceSelected = nil
         touchStarted = nil
-        //pieceClone?.RemoveFromUI()
-        //pieceClone = nil
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {        
@@ -544,7 +606,11 @@ class GameScene: SKScene {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(touch: t, atPoint: t.location(in: self)) }
+        for t in touches
+        {
+            self.touchMoved(touch: t, toPoint: t.location(in: self))
+            self.touchUp(touch: t, atPoint: t.location(in: self))
+        }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {

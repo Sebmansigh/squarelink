@@ -36,10 +36,13 @@ class BGCell
     func Accept(node: SKSpriteNode)
     {
         Occupant = node
+        Node.color = UIColor.red
     }
     
     func Clear()
     {
         Occupant = nil
+        
+        Node.color = UIColor.darkGray
     }
 }
