@@ -154,6 +154,7 @@ class GameScene: SKScene {
         LoadGameData()
         
         LoadLevel(maxLevel)
+        //LoadLevel(10)
         RedrawLevelArrows()
         BeginLoadedLevel()
         
@@ -189,6 +190,10 @@ class GameScene: SKScene {
         if(level == 1)
         {
             GameScene.postText(text: "Build a path from corner to corner!")
+        }
+        else if(level == 10)
+        {
+            GameScene.postText(text: "You can't build on the obstacles.")
         }
         else
         {
