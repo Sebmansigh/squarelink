@@ -384,7 +384,7 @@ class GameScene: SKScene {
     
     func GeneratePieces(rand: GKRandomSource, level: UInt64, path: Stack<SKSpriteNode>) -> Array<Piece>
     {
-        var AvgPieceSize = 9
+        var AvgPieceSize:Int = 9
         if(level > 15)
         {
             AvgPieceSize = 7
