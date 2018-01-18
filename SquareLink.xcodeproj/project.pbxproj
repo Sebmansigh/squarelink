@@ -91,6 +91,7 @@
 				1547AEFC1FCF2A0B0017B04F /* SquareLinkTests */,
 				1547AF071FCF2A0B0017B04F /* SquareLinkUITests */,
 				1547AEE01FCF2A0A0017B04F /* Products */,
+				1547AEE21FCF2A0A0017B04F /* AppDelegate.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,17 +108,16 @@
 		1547AEE11FCF2A0A0017B04F /* SquareLink */ = {
 			isa = PBXGroup;
 			children = (
-				1547AEE21FCF2A0A0017B04F /* AppDelegate.swift */,
 				1547AEE41FCF2A0A0017B04F /* GameScene.sks */,
 				1547AEE81FCF2A0A0017B04F /* GameScene.swift */,
 				15BE44CC1FDCEC670091AAF7 /* Piece.swift */,
 				15BE44CA1FDCBD4C0091AAF7 /* BGCell.swift */,
 				1547AEEA1FCF2A0A0017B04F /* GameViewController.swift */,
+				15BE44C81FDCB8E90091AAF7 /* Stack.swift */,
 				1547AEEC1FCF2A0A0017B04F /* Main.storyboard */,
 				1547AEEF1FCF2A0A0017B04F /* Assets.xcassets */,
 				1547AEF11FCF2A0A0017B04F /* LaunchScreen.storyboard */,
 				1547AEF41FCF2A0A0017B04F /* Info.plist */,
-				15BE44C81FDCB8E90091AAF7 /* Stack.swift */,
 			);
 			path = SquareLink;
 			sourceTree = "<group>";
@@ -203,7 +203,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0910;
-				LastUpgradeCheck = 0910;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Sebastian Snyder";
 				TargetAttributes = {
 					1547AEDE1FCF2A090017B04F = {
@@ -383,7 +383,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -434,7 +434,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -477,7 +477,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_DISABLE_SAFETY_CHECKS = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
