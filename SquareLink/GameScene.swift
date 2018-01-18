@@ -41,7 +41,7 @@ class GameScene: SKScene {
             return documentDirectory.appendingPathComponent(fileName)
         }
         catch let error as NSError {
-            //print("Ooops! Something went wrong: \(error)")
+            print("Ooops! Something went wrong: \(error)")
             return nil
         }
     }
@@ -54,7 +54,7 @@ class GameScene: SKScene {
             try String(maxLevel).write(to: fileURL!, atomically: true, encoding: String.Encoding.utf8)
         }
         catch let error as NSError {
-            //print("Ooops! Something went wrong: \(error)")
+            print("Ooops! Something went wrong: \(error)")
         }
     }
     
@@ -67,7 +67,7 @@ class GameScene: SKScene {
             maxLevel = UInt64(data)!
         }
         catch let error as NSError {
-            //print("Ooops! Something went wrong: \(error)")
+            print("Ooops! Something went wrong: \(error)")
             maxLevel = 1
         }
     }
